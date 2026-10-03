@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "edm-drill"
+version = "0.1.0"
+description = "数控电火花穿孔机 PyQt 上位机"
+requires-python = ">=3.10"
+dependencies = ["PyQt6>=6.6"]
+
+[project.optional-dependencies]
+serial = ["pyserial>=3.5"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+edm-drill = "edm_drill.app:main"
+edm-linuxcnc-probe = "edm_drill.linuxcnc_probe:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+edm_drill = ["examples/*.ngc"]

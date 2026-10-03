@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10181d">
+<title>靶宇机械 · 数控穿孔机 · 横屏预览</title>
+<style>
+:root{color-scheme:dark;--bg:#10181d;--panel:#19242b;--field:#111a20;--button:#27353e;--line:#394a54;--text:#e9eef1;--muted:#a5b1b8;--yellow:#ffd32b;--green:#40d582;--red:#b45a61}
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font:12px/1.35 -apple-system,BlinkMacSystemFont,"Microsoft YaHei","Noto Sans CJK SC",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--yellow);outline-offset:1px}
+.app{height:100dvh;min-height:300px;display:grid;grid-template-rows:48px minmax(0,1fr) 43px 45px;padding:0 7px 5px;gap:4px}.top{display:flex;align-items:center;justify-content:space-between;gap:8px}.brand{font-size:18px;font-weight:800;color:var(--yellow);white-space:nowrap}.brand i{font-style:normal;font-size:24px;vertical-align:-1px}.top-right{display:flex;align-items:center;gap:8px;color:#c7d1d5;white-space:nowrap}.top select{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:5px}.top small{font-size:11px}
+.page{display:none;min-height:0;overflow:auto}.page.active{display:block}.overview.active{display:grid;grid-template-columns:minmax(0,24fr) minmax(0,49fr) minmax(0,27fr);gap:5px;overflow:hidden}.col{min-height:0;overflow:auto;display:flex;flex-direction:column;gap:5px;scrollbar-width:thin;scrollbar-color:#3b4c56 transparent}.panel{border:1px solid var(--line);background:var(--panel);border-radius:4px;padding:9px 10px;min-width:0}.panel h2{font-size:14px;line-height:1.25;margin:0 0 6px;font-weight:750}.small{font-size:11px;color:var(--muted)}.coordinate{display:grid;gap:0;font-size:clamp(19px,2.1vw,27px);line-height:1.25;font-weight:800;font-variant-numeric:tabular-nums}.coordinate div{white-space:nowrap}.status-line{display:flex;justify-content:space-between;gap:5px;font-size:11px;margin:3px 0}.status-line span:last-child{text-align:right}.bar{height:22px;background:#273640;border:1px solid #455660;border-radius:2px;position:relative;overflow:hidden;text-align:center;color:#dae1e4;font-size:11px;line-height:20px}.bar .fill{position:absolute;left:0;top:0;bottom:0;background:var(--yellow);width:0;transition:width .3s}.bar span{position:relative}.bar.slim{height:19px;line-height:17px}.mini-label{font-size:11px;margin:5px 0 3px}.green{color:var(--green);font-weight:700}.yellow{color:var(--yellow)}.muted{color:var(--muted)}
+.path-panel{flex:1;display:flex;flex-direction:column;min-height:0}.path-tabs{display:flex;margin-bottom:0}.path-tabs button{border-radius:0;padding:6px 15px}.path-tabs button.active{background:var(--yellow);color:#10181d;border-color:#efc521;font-weight:700}.path-view{flex:1;min-height:125px;background:#11191e;border:1px solid var(--line);position:relative;overflow:hidden}.path-tip{position:absolute;left:12px;top:10px;color:var(--muted);font-size:11px;pointer-events:none;z-index:1}.path-view svg{width:100%;height:100%;touch-action:none}.path-view textarea{width:100%;height:100%;border:0;resize:none;background:transparent;color:var(--text);padding:32px 12px 12px;font:12px/1.5 ui-monospace,monospace}.path-view .hidden{display:none}.path-bottom{font-size:11px;padding-top:5px}.path-bottom button{width:100%;margin:6px 0}.depth{font-size:clamp(22px,2.4vw,29px);font-weight:800;white-space:nowrap}.right .panel{flex:none}.right .panel h2{margin-bottom:5px}.right .panel .status-line{margin:2px 0}
+.btn{min-height:34px;padding:5px 10px;border:1px solid #465862;border-radius:3px;background:var(--button);color:var(--text);white-space:nowrap}.btn:hover:not(:disabled){background:#374b56}.btn.yellow,.btn.selected{background:var(--yellow);border-color:#f2c721;color:#12181b;font-weight:800}.btn.danger{background:#603039;border-color:#a95a65}.command,.nav{display:flex;gap:4px;min-width:0}.command .btn,.nav .btn{flex:1;min-width:0}.command-note{display:flex;align-items:center;min-width:16%;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.nav .btn{font-size:12px}
+.workspace{max-width:1200px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:start}.workspace .wide{grid-column:1/-1}.workspace h1{font-size:18px;margin:0 0 7px}.workspace .panel{padding:14px}.actions{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:4px}.field label{color:var(--muted);font-size:11px}.field input,.field select,.field textarea{min-height:34px;width:100%;background:var(--field);border:1px solid #465862;border-radius:3px;color:var(--text);padding:6px}.field textarea{min-height:170px;font:12px/1.5 ui-monospace,monospace}.detail{font-size:11px;color:var(--muted);line-height:1.6}.hole-summary{max-height:195px;overflow:auto}.hole-summary div{padding:5px;border-bottom:1px solid var(--line)}.log-box{max-height:250px;overflow:auto;font:11px/1.6 ui-monospace,monospace}.log-box div{border-bottom:1px solid var(--line);padding:3px 0}.log-box time{color:var(--yellow);margin-right:8px}
+.simulation-banner{border:1px solid #997a21;background:#39331d;color:#ffe486;border-radius:3px;padding:6px 9px;font-weight:750}.work-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:8px}.card-stack{display:grid;align-content:start;gap:8px}.panel h3{font-size:14px;margin:0 0 7px}.readout{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}.control-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:6px 0}.control-row .field{flex:1;min-width:105px}.control-row .btn{flex:none}.jog-pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;max-width:400px;margin:7px 0}.jog-pad .centre{align-self:center;text-align:center;color:var(--muted)}.output-row,.edge-row{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--line)}.output-row>span:first-child{flex:1}.output-row .small{min-width:47px}.edge-row>strong{width:30px}.edge-row .edge-value{flex:1;min-width:0}.preview-result{white-space:pre-line;min-height:52px;background:#111a20;border:1px solid var(--line);padding:7px;border-radius:3px;line-height:1.5}.axis-card .field-grid{margin:7px 0}.axis-card .btn{width:100%}.align-note{margin:4px 0 8px}
+.rotate{position:fixed;inset:0;display:none;place-items:center;background:var(--bg);z-index:30;text-align:center;padding:24px}.rotate h2{color:var(--yellow);font-size:22px}.rotate p{color:var(--muted)}.rotate button{margin-top:12px}
+@media(max-width:900px){.app{grid-template-rows:39px minmax(0,1fr) 38px 39px}.brand{font-size:13px}.brand i{font-size:18px}.top small{font-size:9px}.panel{padding:6px 7px}.panel h2{font-size:12px}.small,.status-line,.mini-label,.path-bottom,.path-tip{font-size:10px}.coordinate{font-size:19px}.bar{height:17px;line-height:15px}.bar.slim{height:15px;line-height:13px}.btn{min-height:30px;padding:4px 6px;font-size:10px}.command-note{font-size:9px;min-width:12%}.nav .btn{font-size:10px}.path-tabs button{padding:4px 9px}.path-bottom button{margin:3px 0}.depth{font-size:20px}.workspace .panel{padding:9px}}
+@media(max-width:680px){.brand{font-size:11px}.top small{font-size:8px}.top-right{gap:3px}.overview.active{grid-template-columns:minmax(0,23fr) minmax(0,49fr) minmax(0,28fr)}.coordinate{font-size:16px}.panel h2{font-size:11px}.status-line{font-size:9px}.command-note{display:none}.workspace{grid-template-columns:1fr}.workspace .wide{grid-column:auto}}
+@media(max-width:760px){.work-grid{grid-template-columns:1fr}.edge-row{flex-wrap:wrap}.edge-row .edge-value{min-width:55%}.output-row .btn,.edge-row .btn{min-height:28px}.readout{font-size:13px}.simulation-banner{font-size:10px}}
+@media(orientation:portrait) and (max-width:800px){.rotate{display:grid}.rotate.dismissed{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top"><div class="brand"><i>◉</i> 靶宇机械 · 数控穿孔机</div><div class="top-right"><select aria-label="操作模式"><option>自动</option><option>手动</option></select><small id="header-state">待机 | 演示12孔 | G54 | 模拟模式</small><small id="clock"></small></div></header>
+  <main class="page overview active" id="overview">
+    <div class="col left">
+      <section class="panel"><h2>坐标 / mm</h2><div class="coordinate"><div id="read-x">X +0.000</div><div id="read-y">Y +0.000</div><div id="read-z">Z +0.000</div></div><button class="btn" style="width:100%;margin-top:6px" id="coord-button">当前工作坐标 · 点击切换</button></section>
+      <section class="panel"><h2>速度与功率 · 模拟</h2><div class="mini-label">X轴速度 <span style="float:right" id="speed-x">0%</span></div><div class="bar slim"></div><div class="mini-label">Y轴速度 <span style="float:right" id="speed-y">0%</span></div><div class="bar slim"></div><div class="mini-label">Z轴速度 <span style="float:right" id="speed-z">0%</span></div><div class="bar slim"><div class="fill" id="z-speed-fill"></div></div><div class="mini-label">放电设定功率 <span style="float:right" id="power-label">未接入</span></div><div class="bar slim"><div class="fill" id="power-fill"></div></div><div class="small" style="margin-top:5px">速度相对模拟上限，功率非实测</div></section>
+      <section class="panel"><h2>设备状态</h2><div class="status-line"><span>XY</span><span id="xy-state">模拟待机</span></div><div class="status-line"><span>放电</span><span id="pulse-state">关闭</span></div><div class="status-line"><span>冲液</span><span id="overview-flush-state">关闭</span></div><div class="status-line"><span>电极旋转</span><span id="overview-rotation-state">关闭</span></div></section>
+    </div>
+    <section class="panel path-panel"><h2>孔位与加工路径</h2><div class="path-tabs"><button class="btn active" data-path-tab="map">孔位图</button><button class="btn" data-path-tab="text">程序文本</button></div><div class="path-view" id="path-view"><span class="path-tip" id="path-tip">只读孔图 / mm · 滚轮缩放 · 拖动平移 · 点击选孔</span><svg id="hole-svg" viewBox="0 0 600 400" aria-label="十二孔加工路径"></svg><textarea id="program-copy" class="hidden" readonly aria-label="程序文本"></textarea></div><div class="path-bottom"><div id="selection-note">点击孔查看坐标；依次选两孔显示中心距</div><button class="btn" id="reset-view">复位视图</button><div>工艺：演示配方 · 实际脉冲参数未接入</div><div id="overall-count">当前模拟作业 演示12孔 | 完成 0/12</div><div class="bar slim"><div class="fill" id="overall-fill"></div><span id="overall-percent">0%</span></div></div></section>
+    <div class="col right">
+      <section class="panel"><h2>当前孔加工深度</h2><div class="depth" id="depth-read">0.000 mm</div><div class="small" id="target-read">目标：8.000 mm</div><div class="bar slim" style="margin-top:5px"><div class="fill" id="depth-fill"></div><span id="depth-percent">0%</span></div></section>
+      <section class="panel"><h2>加工状态</h2><div class="green" id="process-state" style="font-size:17px">待机 · 模拟</div><div class="status-line"><span>间隙电压</span><span>—</span></div><div class="status-line"><span>加工电流</span><span>—</span></div><div class="status-line"><span>作业配方</span><span id="active-recipe">演示</span></div></section>
+      <section class="panel"><h2>加工时间</h2><div class="status-line"><span>已加工</span><span id="elapsed">00:00</span></div><div class="status-line"><span>预计剩余</span><span>—</span></div><div class="small">仅模拟时间，不能用于生产估算</div></section>
+      <section class="panel"><h2>状态 / 报警消息</h2><div class="small" id="alarm">模拟模式 · 未连接硬件</div></section>
+    </div>
+  </main>
+  <main class="page" id="manual">
+    <div class="workspace"><div class="wide"><h1>机床手动控制</h1><div class="simulation-banner">离线交互模拟 · 所有按钮只更改本页显示，不会控制实机</div><p class="detail">加工前手动控制各轴和辅助设备；作业运行或暂停时锁定手动操作。碰边操作请切到“找中 / 补偿”。</p></div></div>
+    <div class="workspace work-grid">
+      <div class="card-stack">
+        <section class="panel"><h3>X / Y 轴</h3><div class="control-row"><span class="readout" id="manual-xy-position">X +0.000 · Y +0.000 mm</span><span class="small" id="manual-xy-home-state">XY 待回零</span><button class="btn yellow" id="home-xy">XY 回零</button></div>
+          <div class="control-row"><label class="field">定长点动步距 / mm<input id="jog-step" type="number" min="0.001" max="10" value="0.050" step="0.05"></label></div>
+          <div class="jog-pad"><span></span><button class="btn" id="jog-y-plus">Y ＋</button><span></span><button class="btn" id="jog-x-minus">X －</button><span class="centre">定长点动</span><button class="btn" id="jog-x-plus">X ＋</button><span></span><button class="btn" id="jog-y-minus">Y －</button><span></span></div>
+          <div class="control-row"><label class="field">目标 X / mm<input id="target-x" type="number" step="0.001" value="0.000"></label><label class="field">目标 Y / mm<input id="target-y" type="number" step="0.001" value="0.000"></label><button class="btn" id="target-xy-current">取当前位置</button><button class="btn yellow" id="rapid-xy">XY 快移到目标</button></div>
+        </section>
+        <section class="panel"><h3>Z 轴</h3><div class="control-row"><span class="readout" id="manual-z-position">Z +0.000 mm</span><span class="small" id="manual-z-home-state">Z 待回零</span><button class="btn yellow" id="home-z">Z 回零</button></div>
+          <div class="control-row"><span class="detail">点动步距与 XY 相同</span><button class="btn" id="jog-z-minus">Z － 点动</button><button class="btn" id="jog-z-plus">Z ＋ 点动</button></div>
+          <div class="control-row"><label class="field">目标 Z / mm<input id="target-z" type="number" step="0.001" value="0.000"></label><button class="btn" id="target-z-current">取当前位置</button><button class="btn yellow" id="rapid-z">Z 快移到目标</button></div>
+          <div class="control-row"><span class="detail" id="surface-state">工件表面 Z0：未确认</span><button class="btn" id="surface">确认当前位置为工件表面 Z0</button></div>
+        </section>
+      </div>
+      <div class="card-stack">
+        <section class="panel"><h3>手动状态</h3><div class="detail" id="manual-note">Z、XY 待回零</div><div class="actions"><button class="btn danger" id="stop-manual">停止手动运动 / 输出</button><button class="btn" id="reset-fault">复位故障</button></div><div class="detail">接触工件边缘时请用小步距点动。XY 目标快移前请抬起 Z，核对坐标和安全高度。</div></section>
+        <section class="panel"><h3>辅助设备手动开关</h3>
+          <div class="output-row"><span>冲液 / 水泵</span><span class="small" id="flush-state">关闭</span><button class="btn" id="flush-on">开</button><button class="btn" id="flush-off">关</button></div>
+          <div class="output-row"><span>电极旋转</span><span class="small" id="rotation-state">关闭</span><button class="btn" id="rotation-on">开</button><button class="btn" id="rotation-off">关</button></div>
+          <div class="output-row"><span>放电脉冲</span><span class="small" id="pulse-manual-state">关闭</span><button class="btn" id="pulse-on">开</button><button class="btn" id="pulse-off">关</button></div>
+          <div class="detail">放电开启前需回零 Z、确认工件表面 Z0、开启冲液。只模拟输出状态。</div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <main class="page" id="alignment">
+    <div class="workspace"><div class="wide"><h1>找中与 G54 补偿</h1><div class="simulation-banner">离线计算演示 · 记录和“应用”只更新本页模拟 G54，不会移动或控制实机</div><p class="detail">先在手动页移动铜管并轻触工件边缘；操作者确认后，再记录当前 X / Y。这里没有自动探针或自动碰边检测。</p></div></div>
+    <div class="workspace work-grid">
+      <div class="card-stack">
+        <section class="panel"><h3>铜管尺寸</h3><div class="control-row"><label class="field">铜管外径 / mm<input id="tube-diameter" type="number" min="0.001" max="100" step="0.05" value="0.500"></label><button class="btn yellow" id="update-diameter">更新外径</button></div><div class="detail" id="diameter-summary">外径 0.5000 mm · 半径 0.2500 mm</div></section>
+        <section class="panel"><h3>人工碰边记录 · 当前 G54 工作坐标</h3><div class="readout" id="align-current">X +0.000 · Y +0.000 mm</div><div class="detail" id="g54-offset">当前 G54 偏置：X +0.000 · Y +0.000 mm</div>
+          <div class="edge-row"><strong>X−</strong><span class="edge-value detail" id="edge-x-minus">尚未记录</span><button class="btn" data-capture="x-">记录当前坐标</button><button class="btn" data-clear="x-">清除 / 重测</button></div>
+          <div class="edge-row"><strong>X＋</strong><span class="edge-value detail" id="edge-x-plus">尚未记录</span><button class="btn" data-capture="x+">记录当前坐标</button><button class="btn" data-clear="x+">清除 / 重测</button></div>
+          <div class="edge-row"><strong>Y−</strong><span class="edge-value detail" id="edge-y-minus">尚未记录</span><button class="btn" data-capture="y-">记录当前坐标</button><button class="btn" data-clear="y-">清除 / 重测</button></div>
+          <div class="edge-row"><strong>Y＋</strong><span class="edge-value detail" id="edge-y-plus">尚未记录</span><button class="btn" data-capture="y+">记录当前坐标</button><button class="btn" data-clear="y+">清除 / 重测</button></div>
+          <div class="actions"><button class="btn" id="clear-all-touches">清除全部触碰记录</button></div>
+        </section>
+        <div class="detail align-note">实际工件边缘 = 触碰时铜管中心坐标 ± 铜管半径：X− / Y− 加半径，X＋ / Y＋ 减半径；双边中心取两个实际边缘的中点。</div>
+      </div>
+      <div class="card-stack">
+        <section class="panel axis-card"><h3>X 轴 G54 找中</h3><div class="field-grid"><label class="field">基准<select id="reference-x"><option value="minus">负边作为零点</option><option value="plus">正边作为零点</option><option value="center">双边中心作为零点</option></select></label><label class="field">有符号附加补偿 / mm<input id="comp-x" type="number" step="0.01" value="0.000"></label></div><div class="preview-result" id="preview-x">请先记录所选边缘</div><button class="btn yellow" id="apply-x">预览确认并应用 X 轴 G54（模拟）</button></section>
+        <section class="panel axis-card"><h3>Y 轴 G54 找中</h3><div class="field-grid"><label class="field">基准<select id="reference-y"><option value="minus">负边作为零点</option><option value="plus">正边作为零点</option><option value="center">双边中心作为零点</option></select></label><label class="field">有符号附加补偿 / mm<input id="comp-y" type="number" step="0.01" value="0.000"></label></div><div class="preview-result" id="preview-y">请先记录所选边缘</div><button class="btn yellow" id="apply-y">预览确认并应用 Y 轴 G54（模拟）</button></section>
+        <div class="detail">这里演示 G54 找正偏置，不是 G41 / G42 加工路径刀补。每次应用单轴后清空全部触碰记录，需在新 G54 基准下重新测量。</div>
+      </div>
+    </div>
+  </main>
+  <main class="page" id="library"><div class="workspace"><section class="panel"><h1>程序库</h1><div class="field"><label>G 代码 · G21 / G90 / G54 / G0 XY / M200 P… D…</label><textarea id="gcode" spellcheck="false"></textarea></div><div class="actions"><button class="btn yellow" id="validate">校验程序并生成孔位图</button></div></section><section class="panel"><h1>孔位列表</h1><div class="hole-summary" id="hole-summary"></div><div class="detail">M200 是本系统上位机扩展，不能直接发给普通 CNC 控制器。</div></section></div></main>
+  <main class="page" id="diagnostics"><div class="workspace"><section class="panel"><h1>工艺 / 位置反馈设置</h1><div class="field-grid"><div class="field"><label>位置反馈模式</label><select id="feedback-mode"><option value="scale">光栅尺</option><option value="encoder">编码器</option><option value="dual">光栅尺 + 编码器双闭环</option></select></div><div class="field"><label>光栅尺分辨率 / µm 每计数</label><input id="resolution" type="number" min="0.001" step="0.001" value="5.000"></div><div class="field"><label>编码器有效计数 / 转</label><input id="encoder-counts" type="number" min="1" placeholder="待测定"></div><div class="field"><label>丝杠导程 / mm 每转</label><input id="screw-pitch" type="number" min="0.001" placeholder="待测定"></div></div><div class="actions"><button class="btn yellow" id="apply-settings">应用设置</button></div><div class="detail" id="feedback-summary">当前：光栅尺 · 5 µm/计数。切换只允许 Z 停稳、放电关闭时进行。</div></section><section class="panel"><h1>状态 / 报警日志</h1><div class="log-box" id="log-box"></div></section></div></main>
+  <div class="command"><button class="btn" id="cycle">循环启动 / 继续</button><button class="btn" id="pause">暂停</button><button class="btn" id="stop">停止作业</button><button class="btn" id="single">单段：关</button><span class="command-note">仅模拟 · 未连接下位机</span><button class="btn danger" id="estop">仿真急停</button></div>
+  <nav class="nav" aria-label="主页面"><button class="btn selected" data-page="overview">加工总览</button><button class="btn" data-page="manual">机床手动</button><button class="btn" data-page="alignment">找中 / 补偿</button><button class="btn" data-page="library">程序库</button><button class="btn" data-page="diagnostics">工艺 / 诊断</button></nav>
+</div>
+<div class="rotate" id="rotate"><div><h2>请横屏查看机床界面</h2><p>旋转手机后可看到三栏孔位与加工总览。</p><button class="btn yellow" id="show-anyway">继续查看</button></div></div>
+<script>
+"use strict";
+const $=id=>document.getElementById(id), state={x:0,y:0,z:0,homed:false,xyHomed:false,surface:false,mode:"manual",job:"ready",steps:[],source:"",index:0,holes:[],done:0,pulse:false,flush:false,rotation:false,target:0,feedback:"scale",resolution:5,single:false,pauseRequested:false,elapsed:0,timer:null,zoom:1,panX:0,panY:0,selected:[],diameter:0.5,touches:{},g54:{x:0,y:0}};
+const sample=`%\n(JOB: demo_12_holes)\nG21\nG90\nG54\n${[[15,20],[15,40],[15,60],[15,80],[30,20],[30,40],[30,60],[30,80],[45,20],[45,40],[45,60],[45,80]].map(([y,x])=>`G0 X${x.toFixed(3)} Y${y.toFixed(3)}\nM200 P1 D8.000`).join("\n")}\nM2\n%`;
+$("gcode").value=sample;
+function log(message){let row=document.createElement("div"),time=document.createElement("time");time.textContent=new Date().toLocaleTimeString("zh-CN",{hour12:false});row.append(time,document.createTextNode(message));$("log-box").prepend(row)}
+function alertUser(message){log("操作提示："+message);$("alarm").textContent=message}
+function page(name){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===name));document.querySelectorAll(".nav [data-page]").forEach(b=>b.classList.toggle("selected",b.dataset.page===name))}
+document.querySelectorAll(".nav [data-page]").forEach(b=>b.onclick=()=>page(b.dataset.page));
+function parse(source){let lines=source.trim().split(/\r?\n/),flags=new Set(),steps=[],holes=[],xy=null,ended=false;if(lines[0]?.trim()!=="%"||lines.at(-1)?.trim()!=="%")throw Error("程序必须以独立的 % 行开始和结束");for(let i=1;i<lines.length-1;i++){let code=lines[i].replace(/\([^()]*\)/g,"").trim().toUpperCase().replace(/^N\d+\s*/,"");if(!code)continue;if(ended)throw Error(`第 ${i+1} 行位于 M2 后`);if(["G21","G90","G54"].includes(code)){if(steps.length||flags.has(code))throw Error(`第 ${i+1} 行模式声明错误`);flags.add(code);continue}if(flags.size!==3)throw Error("运动前必须声明 G21、G90、G54");let m;if((m=/^G0+\s+X([+-]?\d+(?:\.\d+)?)\s+Y([+-]?\d+(?:\.\d+)?)$/.exec(code))){xy={x:Number(m[1]),y:Number(m[2])};if(xy.x<0||xy.x>200||xy.y<0||xy.y>200)throw Error(`第 ${i+1} 行 XY 超出范围`);steps.push({type:"move",...xy})}else if((m=/^M200\s+P(\d+)\s+D(\d+(?:\.\d+)?)$/.exec(code))){if(!xy)throw Error(`第 ${i+1} 行缺少孔位`);let p=Number(m[1]),d=Number(m[2]);if(![1,2].includes(p)||d<=0||d>30)throw Error(`第 ${i+1} 行配方或深度无效`);let hole={number:holes.length+1,...xy,p,d};holes.push(hole);steps.push({type:"hole",hole})}else if(code==="M0")steps.push({type:"pause"});else if(code==="M2"){steps.push({type:"end"});ended=true}else throw Error(`第 ${i+1} 行不支持：${code}`)}if(!ended||!holes.length)throw Error("程序缺少 M2 或 M200");return {steps,holes}}
+function validate(){try{if(state.job==="running")throw Error("运行中不能换程序");let result=parse($("gcode").value);state.steps=result.steps;state.holes=result.holes;state.source=$("gcode").value;state.index=0;state.done=0;state.job="ready";let list=$("hole-summary");list.replaceChildren();state.holes.forEach(h=>{let row=document.createElement("div");row.textContent=`H${String(h.number).padStart(3,"0")}  X ${h.x.toFixed(3)}  Y ${h.y.toFixed(3)}  P${h.p}  D${h.d.toFixed(3)}`;list.append(row)});$("program-copy").value=state.source;drawMap();render();log(`程序校验完成：${state.holes.length} 孔`)}catch(e){alertUser(e.message)}}
+function drawMap(){let svg=$("hole-svg");svg.replaceChildren();if(!state.holes.length)return;const ns="http://www.w3.org/2000/svg",minX=Math.min(...state.holes.map(h=>h.x)),maxX=Math.max(...state.holes.map(h=>h.x)),minY=Math.min(...state.holes.map(h=>h.y)),maxY=Math.max(...state.holes.map(h=>h.y));state.viewHeight=Math.max(170,600*svg.clientHeight/Math.max(1,svg.clientWidth));svg.setAttribute("viewBox",`0 0 600 ${state.viewHeight}`);const fx=x=>75+(x-minX)/Math.max(1,maxX-minX)*450,fy=y=>state.viewHeight-42-(y-minY)/Math.max(1,maxY-minY)*(state.viewHeight-92);let group=document.createElementNS(ns,"g");group.setAttribute("transform",`translate(${state.panX} ${state.panY}) translate(300 ${state.viewHeight/2}) scale(${state.zoom}) translate(-300 -${state.viewHeight/2})`);svg.append(group);let route=document.createElementNS(ns,"polyline");route.setAttribute("points",state.holes.map(h=>`${fx(h.x)},${fy(h.y)}`).join(" "));route.setAttribute("fill","none");route.setAttribute("stroke","#53636e");route.setAttribute("stroke-width","1.2");route.setAttribute("stroke-dasharray","2 2");group.append(route);state.holes.forEach(h=>{let circle=document.createElementNS(ns,"circle"),text=document.createElementNS(ns,"text");circle.setAttribute("cx",fx(h.x));circle.setAttribute("cy",fy(h.y));circle.setAttribute("r",state.selected.includes(h.number)?10:9);circle.setAttribute("fill",state.selected.includes(h.number)?"#ffd32b":h.number<=state.done?"#40d582":"#8296a2");circle.setAttribute("class","hole-node");circle.style.cursor="pointer";circle.onclick=()=>selectHole(h);text.setAttribute("x",fx(h.x)-20);text.setAttribute("y",fy(h.y)+22);text.setAttribute("fill","#cbd5da");text.setAttribute("font-size","15");text.textContent=`H${String(h.number).padStart(3,"0")}`;text.style.cursor="pointer";text.onclick=()=>selectHole(h);group.append(circle,text)})}
+function selectHole(h){state.selected.push(h.number);state.selected=state.selected.slice(-2);let info=`H${String(h.number).padStart(3,"0")}  X ${h.x.toFixed(3)}  Y ${h.y.toFixed(3)}  |  P${h.p} D${h.d.toFixed(3)}`;if(state.selected.length===2){let a=state.holes[state.selected[0]-1],b=state.holes[state.selected[1]-1];info+=`  |  中心距 ${Math.hypot(a.x-b.x,a.y-b.y).toFixed(3)} mm`}$("selection-note").textContent=info;drawMap()}
+const svg=$("hole-svg");let drag=null;svg.addEventListener("wheel",e=>{e.preventDefault();state.zoom=Math.min(4,Math.max(.6,state.zoom*(e.deltaY<0?1.12:1/1.12)));drawMap()},{passive:false});svg.addEventListener("pointerdown",e=>{if(e.target.classList.contains("hole-node"))return;drag={x:e.clientX,y:e.clientY};svg.setPointerCapture(e.pointerId)});svg.addEventListener("pointermove",e=>{if(!drag)return;const r=svg.getBoundingClientRect();state.panX+=(e.clientX-drag.x)/r.width*600;state.panY+=(e.clientY-drag.y)/r.height*state.viewHeight;drag={x:e.clientX,y:e.clientY};drawMap()});svg.addEventListener("pointerup",()=>drag=null);$("reset-view").onclick=()=>{state.zoom=1;state.panX=state.panY=0;state.selected=[];$("selection-note").textContent="点击孔查看坐标；依次选两孔显示中心距";drawMap()};
+document.querySelectorAll("[data-path-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll("[data-path-tab]").forEach(x=>x.classList.toggle("active",x===b));let text=b.dataset.pathTab==="text";$("hole-svg").classList.toggle("hidden",text);$("program-copy").classList.toggle("hidden",!text);$("path-tip").textContent=text?"当前已校验的 G 代码（只读）":"只读孔图 / mm · 滚轮缩放 · 拖动平移 · 点击选孔"});
+function signed(value,digits=3){return `${value>=0?"+":""}${value.toFixed(digits)}`}
+function edgeCoord(edge){
+  const point=state.touches[edge];
+  if(!point)throw Error(`缺少 ${edge.toUpperCase()} 触碰记录`);
+  const axis=edge[0],radius=state.diameter/2;
+  return point[axis]+(edge.endsWith("-")?radius:-radius)
+}
+function axisPreview(axis){
+  const reference=$("reference-"+axis).value,compensation=Number($("comp-"+axis).value);
+  if(!Number.isFinite(compensation))throw Error("附加补偿须为有限数");
+  let origin;
+  if(reference==="minus")origin=edgeCoord(axis+"-");
+  else if(reference==="plus")origin=edgeCoord(axis+"+");
+  else{
+    const lower=edgeCoord(axis+"-"),upper=edgeCoord(axis+"+");
+    if(upper<=lower)throw Error(`${axis.toUpperCase()} 对边顺序错误或有效宽度不大于 0`);
+    origin=lower/2+upper/2;
+  }
+  origin+=compensation;
+  if(!Number.isFinite(origin))throw Error("计算结果无效");
+  return {origin,newReadout:state[axis]-origin}
+}
+function renderAlignment(manual){
+  const s=state,dirty=Math.abs(Number($("tube-diameter").value)-s.diameter)>0.00005;
+  const ready=manual&&s.homed&&s.xyHomed&&!s.pulse;
+  $("align-current").textContent=`X ${signed(s.x)} · Y ${signed(s.y)} mm`;
+  $("g54-offset").textContent=`当前 G54 偏置：X ${signed(s.g54.x)} · Y ${signed(s.g54.y)} mm`;
+  $("diameter-summary").textContent=`已使用外径 ${s.diameter.toFixed(4)} mm · 半径 ${(s.diameter/2).toFixed(4)} mm${dirty?" · 输入已修改，请先更新外径":""}`;
+  $("update-diameter").disabled=!manual||!dirty;
+  for(const edge of ["x-","x+","y-","y+"]){
+    const label=$("edge-"+edge[0]+(edge[1]==="-"?"-minus":"-plus")),point=s.touches[edge];
+    label.textContent=point?`触碰 X ${signed(point.x)}  Y ${signed(point.y)} · 实际边缘 ${signed(edgeCoord(edge))} mm`:"尚未记录";
+    document.querySelector(`[data-capture="${edge}"]`).disabled=!ready||dirty||Boolean(point);
+    document.querySelector(`[data-clear="${edge}"]`).disabled=!point;
+  }
+  $("clear-all-touches").disabled=!Object.keys(s.touches).length;
+  for(const axis of ["x","y"]){
+    let valid=false;
+    try{
+      const {origin,newReadout}=axisPreview(axis);
+      $("preview-"+axis).textContent=`零点位置（旧 G54）：${signed(origin)} mm\n当前读数：${signed(s[axis])} mm  →  应用后：${signed(newReadout)} mm`;
+      valid=true;
+    }catch(error){$("preview-"+axis).textContent=`预览：${error.message}`}
+    $("apply-"+axis).disabled=!ready||dirty||!valid;
+  }
+}
+function render(){
+  const s=state,total=s.holes.length,percent=total?Math.round(s.done/total*100):0;
+  const target=s.target||s.holes[0]?.d||0,depth=s.target?Math.max(0,-s.z):0,depthPercent=target?Math.round(depth/target*100):0;
+  $("read-x").textContent=`X ${signed(s.x)}`;$("read-y").textContent=`Y ${signed(s.y)}`;$("read-z").textContent=`Z ${signed(s.z)}`;
+  $("depth-read").textContent=`${depth.toFixed(3)} mm`;$("target-read").textContent=`目标：${target?target.toFixed(3):"—"} mm`;
+  $("depth-fill").style.width=depthPercent+"%";$("depth-percent").textContent=depthPercent+"%";
+  $("overall-fill").style.width=percent+"%";$("overall-percent").textContent=percent+"%";
+  $("overall-count").textContent=`当前模拟作业 | 完成 ${s.done}/${total} 孔`;
+  $("process-state").textContent=s.mode==="fault"?"故障 · 模拟":s.mode==="edm"?"穿孔中 · 模拟":s.mode==="retract"?"退刀中 · 模拟":s.job==="paused"?"暂停 · 模拟":"待机 · 模拟";
+  $("xy-state").textContent=s.job==="running"?"模拟运动中":"模拟待机";
+  $("pulse-state").textContent=s.pulse?"开启 · 仿真":"关闭";
+  $("overview-flush-state").textContent=s.flush?"开启 · 仿真":"关闭";
+  $("overview-rotation-state").textContent=s.rotation?"开启 · 仿真":"关闭";
+  $("speed-z").textContent=s.mode==="edm"?"30%":"0%";$("z-speed-fill").style.width=s.mode==="edm"?"30%":"0%";
+  $("header-state").textContent=`${s.mode==="fault"?"故障":s.job==="running"?"运行中":s.job==="paused"?"暂停":"待机"} | 演示${total}孔 | G54 | 模拟模式`;
+  $("manual-xy-position").textContent=`X ${signed(s.x)} · Y ${signed(s.y)} mm`;
+  $("manual-z-position").textContent=`Z ${signed(s.z)} mm`;
+  $("manual-xy-home-state").textContent=s.xyHomed?"XY 已回零":"XY 待回零";
+  $("manual-z-home-state").textContent=s.homed?"Z 已回零":"Z 待回零";
+  $("surface-state").textContent=`工件表面 Z0：${s.surface?"已确认":"未确认"}`;
+  $("manual-note").textContent=`模式：${s.mode==="fault"?"故障":s.job==="running"||s.job==="paused"?"作业中 / 已暂停":"手动"} · Z ${signed(s.z)} mm · XY ${s.xyHomed?"已回零":"待回零"} · Z ${s.homed?"已回零":"待回零"}`;
+  $("flush-state").textContent=s.flush?"开启":"关闭";$("rotation-state").textContent=s.rotation?"开启":"关闭";$("pulse-manual-state").textContent=s.pulse?"开启":"关闭";
+  $("feedback-summary").textContent=`当前：${{scale:"光栅尺",encoder:"编码器",dual:"双闭环"}[s.feedback]} · ${s.resolution} µm/计数。切换后需重新确认 Z0。`;
+  $("elapsed").textContent=`${String(Math.floor(s.elapsed/60)).padStart(2,"0")}:${String(s.elapsed%60).padStart(2,"0")}`;
+  const jobActive=s.job==="running"||s.job==="paused",manual=s.mode==="manual"&&!jobActive;
+  const motionReady=manual&&s.homed&&!s.pulse,xyReady=motionReady&&s.xyHomed;
+  $("cycle").disabled=s.job==="running"||s.mode==="fault"||!s.steps.length;
+  $("pause").disabled=s.job!=="running"||s.pauseRequested;
+  $("stop").disabled=!jobActive;
+  $("validate").disabled=jobActive;$("gcode").readOnly=jobActive;
+  $("home-z").disabled=!manual||s.pulse;$("home-xy").disabled=!manual||!s.homed||s.pulse;
+  for(const id of ["jog-x-plus","jog-x-minus","jog-y-plus","jog-y-minus","target-xy-current","rapid-xy"])$(id).disabled=!xyReady;
+  for(const id of ["jog-z-plus","jog-z-minus","target-z-current","rapid-z","surface"])$(id).disabled=!motionReady;
+  $("stop-manual").disabled=jobActive||s.mode==="fault";$("reset-fault").disabled=s.mode!=="fault";
+  for(const [name,enabled] of [["flush",s.flush],["rotation",s.rotation],["pulse",s.pulse]]){
+    $(name+"-on").disabled=!manual||enabled||(name==="pulse"&&(!s.homed||!s.surface||!s.flush));
+    $(name+"-off").disabled=jobActive||!enabled;
+  }
+  $("apply-settings").disabled=!manual;
+  $("single").classList.toggle("selected",s.single);$("single").textContent=s.single?"单段：开":"单段：关";
+  renderAlignment(manual);drawMap()
+}
+function clearTimer(){if(state.timer)clearTimeout(state.timer);state.timer=null}function safeStop(){clearTimer();state.pulse=false;state.flush=false;state.rotation=false;state.target=0;state.z=0;state.mode="manual";state.pauseRequested=false;state.job="stopped";render()}
+function next(){if(state.job!=="running")return;const step=state.steps[state.index++];if(!step){state.job="done";log("作业完成");render();return}if(step.type==="move"){state.x=step.x;state.y=step.y;render();state.timer=setTimeout(next,300)}else if(step.type==="hole"){state.mode="armed";state.target=step.hole.d;render();state.timer=setTimeout(()=>{if(state.job!=="running")return;state.mode="edm";state.pulse=true;log(`加工 H${String(step.hole.number).padStart(3,"0")} · P${step.hole.p}`);render();state.timer=setTimeout(()=>{if(state.job!=="running")return;state.z=-state.target;state.pulse=false;state.mode="retract";render();state.timer=setTimeout(()=>{if(state.job!=="running")return;state.z=0;state.target=0;state.mode="manual";state.done++;log(`H${String(state.done).padStart(3,"0")} 完成，已退刀`);if(state.pauseRequested||state.single){state.job="paused";state.pauseRequested=false;log("单孔结束，作业暂停");render()}else{render();state.timer=setTimeout(next,160)}},350)},800)},180)}else if(step.type==="pause"){state.job="paused";log("M0 暂停");render()}else{state.job="done";log("M2：作业完成");render()}}
+$("cycle").onclick=()=>{if(state.job==="paused"){state.job="running";log("作业继续");render();next();return}if(!state.steps.length)return alertUser("请先校验程序");if($("gcode").value!==state.source)return alertUser("程序已修改，请重新校验");if(!state.homed||!state.xyHomed||!state.surface||state.mode!=="manual")return alertUser("请先回零 XY / Z 并确认工件表面 Z0");state.index=0;state.done=0;state.elapsed=0;state.pulse=false;state.flush=false;state.rotation=false;state.job="running";log("循环启动（仿真）");render();next()};$("pause").onclick=()=>{if(state.job!=="running")return;if(state.mode==="edm"||state.mode==="retract"||state.mode==="armed"){state.pauseRequested=true;log("已请求暂停，当前孔退刀后生效")}else{clearTimer();state.job="paused";log("作业已暂停")}render()};$("stop").onclick=()=>{safeStop();log("作业停止，放电关闭（仿真）")};$("single").onclick=()=>{state.single=!state.single;log(state.single?"单段模式开启":"单段模式关闭");render()};$("estop").onclick=()=>{safeStop();state.mode="fault";state.homed=false;state.xyHomed=false;state.surface=false;alertUser("仿真急停：请复位并重新回零");render()};
+function execute(operation){try{operation();render()}catch(error){alertUser(error.message);render()}}
+function manualReady(needXY=false){
+  if(state.job==="running"||state.job==="paused")throw Error("作业运行或暂停中，先停止作业");
+  if(state.mode!=="manual")throw Error("控制器未处于手动模式");
+  if(!state.homed||(needXY&&!state.xyHomed))throw Error("请先完成 Z 与 XY 回零");
+  if(state.pulse)throw Error("轴移动或找中前请关闭手动放电")
+}
+function jogStep(){
+  const step=Number($("jog-step").value);
+  if(!Number.isFinite(step)||step<0.001||step>10)throw Error("点动步距须在 0.001～10 mm");
+  return step
+}
+function checkXY(x,y){
+  if(!Number.isFinite(x)||!Number.isFinite(y))throw Error("XY 目标须为有限数");
+  if(x+state.g54.x<0||x+state.g54.x>200||y+state.g54.y<0||y+state.g54.y>200)throw Error("XY 超出本页仿真行程 0～200 mm")
+}
+function moveXY(x,y,rapid=false){
+  manualReady(true);
+  if(rapid&&state.z<0)throw Error("XY 快移前请先将 Z 抬至 0 mm 或以上");
+  checkXY(x,y);state.x=x;state.y=y;
+  log(`XY ${rapid?"快移":"点动"}至 X${signed(x)} Y${signed(y)} mm（仿真）`)
+}
+function moveZ(target,rapid=false){
+  manualReady();
+  if(!Number.isFinite(target)||target< -50||target>20)throw Error("Z 超出本页仿真行程 -50～20 mm");
+  state.z=target;state.surface=false;
+  log(`Z ${rapid?"快移":"点动"}至 ${signed(target)} mm（仿真）`)
+}
+$("home-z").onclick=()=>execute(()=>{
+  if(state.mode!=="manual"||state.job==="running"||state.job==="paused"||state.pulse)throw Error("请停机并关闭放电后回零 Z");
+  state.z=0;state.homed=true;state.surface=false;log("Z 已回零（仿真）")
+});
+$("home-xy").onclick=()=>execute(()=>{
+  manualReady();
+  state.x=-state.g54.x;state.y=-state.g54.y;state.xyHomed=true;
+  log("XY 已回零（仿真）")
+});
+for(const [id,dx,dy] of [["jog-x-plus",1,0],["jog-x-minus",-1,0],["jog-y-plus",0,1],["jog-y-minus",0,-1]]){
+  $(id).onclick=()=>execute(()=>{const step=jogStep();moveXY(state.x+dx*step,state.y+dy*step)})
+}
+$("target-xy-current").onclick=()=>{ $("target-x").value=state.x.toFixed(3);$("target-y").value=state.y.toFixed(3) };
+$("rapid-xy").onclick=()=>execute(()=>moveXY(Number($("target-x").value),Number($("target-y").value),true));
+$("jog-z-plus").onclick=()=>execute(()=>moveZ(state.z+jogStep()));
+$("jog-z-minus").onclick=()=>execute(()=>moveZ(state.z-jogStep()));
+$("target-z-current").onclick=()=>{ $("target-z").value=state.z.toFixed(3) };
+$("rapid-z").onclick=()=>execute(()=>moveZ(Number($("target-z").value),true));
+$("surface").onclick=()=>execute(()=>{manualReady();state.z=0;state.surface=true;log("工件表面 Z0 已确认（仿真）")});
+$("stop-manual").onclick=()=>execute(()=>{
+  if(state.job==="running"||state.job==="paused")throw Error("自动作业中请使用停止作业");
+  state.pulse=false;state.flush=false;state.rotation=false;log("已停止手动运动和输出（仿真）")
+});
+$("reset-fault").onclick=()=>execute(()=>{
+  if(state.job==="running"||state.job==="paused")throw Error("停止作业后才能复位故障");
+  state.mode="manual";state.homed=false;state.xyHomed=false;state.surface=false;
+  $("alarm").textContent="模拟模式 · 未连接硬件";log("故障复位：请重新回零")
+});
+function setOutput(name,enabled){
+  if(state.job==="running"||state.job==="paused")throw Error("作业中手动输出锁定");
+  if(state.mode!=="manual"&&(enabled||state.mode!=="fault"))throw Error("控制器未处于手动模式");
+  if(name==="pulse"&&enabled&&(!state.homed||!state.surface||!state.flush))throw Error("放电前请回零 Z、确认 Z0 并开启冲液");
+  if(name==="flush"&&!enabled&&state.pulse)throw Error("请先关闭放电，再关闭冲液");
+  state[name]=enabled;
+  log(`手动${{flush:"冲液",rotation:"电极旋转",pulse:"放电"}[name]}已${enabled?"开启":"关闭"}（仿真）`)
+}
+for(const name of ["flush","rotation","pulse"]){
+  $(name+"-on").onclick=()=>execute(()=>setOutput(name,true));
+  $(name+"-off").onclick=()=>execute(()=>setOutput(name,false))
+}
+function alignmentReady(){
+  manualReady(true);
+  if(!Number.isFinite(state.x)||!Number.isFinite(state.y))throw Error("当前坐标无效，不能找中")
+}
+function diameterDirty(){return Math.abs(Number($("tube-diameter").value)-state.diameter)>0.00005}
+$("tube-diameter").addEventListener("input",render);
+$("update-diameter").onclick=()=>execute(()=>{
+  if(state.job==="running"||state.job==="paused"||state.mode!=="manual")throw Error("作业中不能改找中参数");
+  const diameter=Number($("tube-diameter").value);
+  if(!Number.isFinite(diameter)||diameter<=0||diameter>100)throw Error("铜管外径须在 0～100 mm 内且大于 0");
+  state.diameter=diameter;state.touches={};log(`铜管外径已更新为 ${diameter.toFixed(4)} mm，触碰记录已清空`)
+});
+for(const button of document.querySelectorAll("[data-capture]"))button.onclick=()=>execute(()=>{
+  alignmentReady();if(diameterDirty())throw Error("请先更新铜管外径");
+  const edge=button.dataset.capture;if(state.touches[edge])throw Error(`${edge.toUpperCase()} 已记录，请先清除重测`);
+  state.touches[edge]={x:state.x,y:state.y};log(`人工记录 ${edge.toUpperCase()} 碰边：X${signed(state.x)} Y${signed(state.y)}（仿真）`)
+});
+for(const button of document.querySelectorAll("[data-clear]"))button.onclick=()=>execute(()=>{
+  const edge=button.dataset.clear;delete state.touches[edge];log(`已清除 ${edge.toUpperCase()} 碰边记录`)
+});
+$("clear-all-touches").onclick=()=>execute(()=>{state.touches={};log("已清除全部触碰记录")});
+for(const axis of ["x","y"]){
+  $("reference-"+axis).addEventListener("change",render);
+  $("comp-"+axis).addEventListener("input",render);
+  $("apply-"+axis).onclick=()=>execute(()=>{
+    alignmentReady();if(diameterDirty())throw Error("请先更新铜管外径");
+    const before=axisPreview(axis),letter=axis.toUpperCase();
+    const question=`${letter} 轴零点位置（旧 G54）：${signed(before.origin)} mm\n当前 G54 读数：${signed(state[axis])} mm\n应用后当前 G54 读数：${signed(before.newReadout)} mm\n\n仅更新本页模拟 G54；机床不会移动，实机不会收到命令。确认？`;
+    if(!window.confirm(question))return;
+    alignmentReady();const latest=axisPreview(axis);
+    if(Math.abs(latest.origin-before.origin)>0.001||Math.abs(latest.newReadout-before.newReadout)>0.001)throw Error("坐标或碰边记录已变化，请重新预览");
+    state.g54[axis]+=latest.origin;state[axis]=latest.newReadout;state.touches={};
+    log(`${letter} 轴模拟 G54 已应用；旧零点 ${signed(latest.origin)} mm，触碰记录已清空`)
+  })
+}
+$("apply-settings").onclick=()=>{if(state.job==="running"||state.job==="paused"||state.mode!=="manual")return alertUser("停机且放电关闭后才能切换反馈");let mode=$("feedback-mode").value,res=Number($("resolution").value);if(!Number.isFinite(res)||res<=0)return alertUser("光栅尺分辨率必须大于 0");if(mode!=="scale"&&(!Number($("encoder-counts").value)||!Number($("screw-pitch").value)))return alertUser("编码器模式需填写有效计数和丝杠导程");state.feedback=mode;state.resolution=res;state.surface=false;log("反馈设置已应用；请重新确认 Z0");render()};$("validate").onclick=validate;$("gcode").addEventListener("input",()=>{if($("gcode").value!==state.source){state.job="idle";state.steps=[];state.holes=[];state.done=0;render()}});$("coord-button").onclick=()=>alertUser("当前仅支持 G54；其他工作坐标系待实机适配");$("show-anyway").onclick=()=>$("rotate").classList.add("dismissed");
+setInterval(()=>{$("clock").textContent=new Date().toLocaleString("zh-CN",{hour12:false});if(state.job==="running"){state.elapsed++;render()}},1000);$("clock").textContent=new Date().toLocaleString("zh-CN",{hour12:false});validate();log("离线横屏预览已启动");render();
+</script>
+</body>
+</html>
